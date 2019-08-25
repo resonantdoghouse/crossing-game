@@ -35,7 +35,7 @@ const enemies = [
   new GameCharacter(700, 50, width, width, "rgb(0, 0, 255)", 4)
 ];
 
-const player = new GameCharacter(50, 225, width, width, "rgb(0, 255, 0)", 0);
+const player = new GameCharacter(50, 200, width, width, "rgb(0, 255, 0)", 0);
 
 const goal = new GameCharacter(
   screenWidth - width,
@@ -45,6 +45,22 @@ const goal = new GameCharacter(
   "rgb(0,0,0)",
   0
 );
+
+const sprites = {};
+
+const loadSprites = function() {
+  sprites.player = new Image();
+  sprites.player.src = "images/hero.png";
+
+  sprites.background = new Image();
+  sprites.background.src = "images/floor.png";
+
+  sprites.enemy = new Image();
+  sprites.enemy.src = "images/enemy.png";
+
+  sprites.goal = new Image();
+  sprites.goal.src = "images/chest.png";
+};
 
 document.onkeydown = function(event) {
   let keyPressed = event.keyCode;
@@ -68,21 +84,25 @@ const checkCollisions = function(rect1, rect2) {
   return xOverlap && yOverlap;
 };
 
+/**
+ * Draw game objects on canvas
+ */
 const draw = function() {
   ctx.clearRect(0, 0, screenWidth, screenHeight);
 
-  ctx.fillStyle = player.color;
-  ctx.fillRect(player.x, player.y, player.width, player.height);
+  ctx.drawImage(sprites.background, 0, 0);
+  ctx.drawImage(sprites.player, player.x, player.y);
+  ctx.drawImage(sprites.goal, goal.x, goal.y);
 
   enemies.forEach(function(element) {
-    ctx.fillStyle = element.color;
-    ctx.fillRect(element.x, element.y, element.width, element.height);
+    ctx.drawImage(sprites.enemy, element.x, element.y);
   });
 
-  ctx.fillStyle = goal.color;
-  ctx.fillRect(goal.x, goal.y, goal.width, goal.height);
 };
 
+/**
+ * Game state manager
+ */
 const update = function() {
   player.moveHorizontally();
 
@@ -100,18 +120,27 @@ const update = function() {
   enemies[0].moveVertically();
 };
 
+/**
+ * Endgame logic
+ */
 const endGame = function(text) {
   isGameLive = false;
   alert(text);
   window.location = "";
 };
 
+
+
+/**
+ * Game Loop
+ */
 const step = function() {
   draw();
   update();
-  if(isGameLive){
+  if (isGameLive) {
     window.requestAnimationFrame(step);
   }
 };
 
+loadSprites();
 step();
