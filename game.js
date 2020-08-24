@@ -53,7 +53,7 @@ const loadSprites = function() {
   sprites.player.src = "images/hero.png";
 
   sprites.background = new Image();
-  sprites.background.src = "images/floor.png";
+  sprites.background.src = "images/grass-background.jpg";
 
   sprites.enemy = new Image();
   sprites.enemy.src = "images/enemy.png";
